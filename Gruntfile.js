@@ -11,7 +11,7 @@ module.exports = function(grunt) {
           'test/*.js', //should we include it???
           '*.js' //should we include server.js???
         ],
-        dest: 'production.js'
+        dest: 'public/dist/production.js'
       }
     },
 
@@ -32,8 +32,8 @@ module.exports = function(grunt) {
 
     uglify: {
       build: {
-        src: 'production.js',
-        dest: 'production.min.js'
+        src: 'public/dist/production.js',
+        dest: 'public/dist/production.min.js'
       }
     },
 
