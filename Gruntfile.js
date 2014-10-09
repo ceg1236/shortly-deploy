@@ -7,9 +7,7 @@ module.exports = function(grunt) {
         src: [
           'app/**/*.js',
           'lib/*.js',
-          'public/**/*.js',
-          'test/*.js', //should we include it???
-          '*.js' //should we include server.js???
+          'public/**/*.js'
         ],
         dest: 'public/dist/production.js'
       }
@@ -39,7 +37,9 @@ module.exports = function(grunt) {
 
     jshint: {
       files: [
-        // Add filespec list here
+        'app/**/*.js',
+        'lib/*.js',
+        'public/**/*.js'
       ],
       options: {
         force: 'true',
@@ -73,6 +73,11 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+        command: [
+        'azure site scale mode standard crazymonkeys',
+        'git push azure',
+        'azure site log tail crazymonkeys'
+        ].join('&&')
       }
     },
   });
@@ -104,23 +109,29 @@ module.exports = function(grunt) {
   ////////////////////////////////////////////////////
 
   grunt.registerTask('test', [
+    'jshint',
     'mochaTest'
   ]);
 
-  grunt.registerTask('build', ['concat', 'uglify'
+  grunt.registerTask('build', [
+    'concat',
+    'uglify'
   ]);
 
   grunt.registerTask('upload', function(n) {
     if(grunt.option('prod')) {
-      // add your production server task here
+      grunt.task.run( ['shell'] );
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
   });
 
   grunt.registerTask('deploy', [
-    // add your deploy tasks here
-  ]);
+    'test',
+    'build',
+    'upload'
+    ]
+  );
 
 
 };
